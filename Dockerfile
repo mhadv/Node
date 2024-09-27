@@ -4,14 +4,14 @@ FROM node:18 AS build
 # Set working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json from the correct directory
-COPY src/package.json src/package-lock.json ./  # Update this path according to your project structure
+# Copy package.json and package-lock.json from the root directory
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install --omit=dev
 
 # Copy all source code after installing dependencies
-COPY ./src .
+COPY ./src .  # Use this if your source code is inside `src` directory
 
 # Run build (if your app requires it, like for React/TypeScript)
 RUN npm run build
