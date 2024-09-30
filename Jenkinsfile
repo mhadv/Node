@@ -10,27 +10,21 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                  sh "sudo docker build -t node ."
-                }
-            
-        }
-        
-        
-        
-        stage('Docker Image Tag') {
-            steps {
-                 
-                  sh "docker tag node omrajput/node:latest" 
-                
+                sh "docker build -t node ."
             }
         }
-        
+
+        stage('Docker Image Tag') {
+            steps {
+                sh "docker tag node omrajput/node:latest"
+            }
+        }
 
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
-                        dockerImage.push('latest')
+                    withDockerRegistry(credentialsId: 'Docker') {
+                        sh "docker push omrajput/node:latest"
                     }
                 }
             }
